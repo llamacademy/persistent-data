@@ -1,7 +1,6 @@
 using Newtonsoft.Json;
 using System;
 using System.IO;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Security.Cryptography;
 using System.Text;
 using UnityEngine;
@@ -34,7 +33,7 @@ public class JsonDataService : IDataService
             else
             {
                 stream.Close();
-                File.WriteAllText(path, JsonUtility.ToJson(Data));
+                File.WriteAllText(path, JsonConvert.SerializeObject(Data));
             }
             return true;
         }
@@ -84,7 +83,7 @@ public class JsonDataService : IDataService
             }
             else
             {
-                data = JsonUtility.FromJson<T>(File.ReadAllText(path));
+                data = JsonConvert.DeserializeObject<T>(File.ReadAllText(path));
             }
             return data;
         }
@@ -118,6 +117,6 @@ public class JsonDataService : IDataService
         string result = reader.ReadToEnd();
 
         Debug.Log($"Decrypted result (if the following is not legible, probably wrong key or iv): {result}");
-        return JsonUtility.FromJson<T>(result);
+        return JsonConvert.DeserializeObject<T>(result);
     }
 }
